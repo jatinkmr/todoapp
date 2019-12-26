@@ -4,6 +4,7 @@ RUN: npm run start
 For Installation install following modules:
 =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
 npm init
+npm install --save @types/mongoose
 npm install express path mongodb body-parser --save
 npm install --save-dev nodemon
 =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
