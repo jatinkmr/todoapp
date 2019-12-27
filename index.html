@@ -55,6 +55,28 @@
                     $("#todoUserInput").val('');
                 }
 
+                const editTodo = (todo, todoID, editID) => {
+                    console.log("Edit");
+                    let editBtn = $(`${editID}`);
+                    editBtn.click(() => {
+                        fetch(`/${todo._id}`, {
+                            method: "put",
+                            headers: {
+                                "Content-Type": "application/json; charset=utf8"
+                            },
+                            body: JSON.stringify({todo: todoUserInput.val()})
+                        }).then((response) => {
+                            return response.json();
+                        }).then((data) => {
+                            if(data.ok == 1) {
+                                let todoIndex = $(`#${todoID}`);
+                                todoIndex.html(data.value.todo);
+                                resetTodosInput();
+                            }
+                        });
+                    });
+                }
+
                 const deleteTodo = (todo, listItemID, deleteID) => {
                     let deleteBtn = $(`#${deleteID}`);
                     deleteBtn.click(() => {
@@ -96,7 +118,7 @@
                     data.forEach((todo) => {
                         let ids = buildIDS(todo);
                         display.append(buildTemplate(todo, ids));
-                        // editTodo(todo, ids.todoID, ids.editID);
+                        editTodo(todo, ids.todoID, ids.editID);
                         deleteTodo(todo, ids.listItemID, ids.deleteID);
                     });
                 }
