@@ -13,8 +13,8 @@
                 <div class="col-lg-8">
                     <form id="form">
                         <div class="form-group">
-                            <label for="todo">Todo</label>
-                            <input type="text" class="form-control" id="todoUserInput" placeholder="Enter Your ToDo....">
+                            <h2 style="text-align: center; font-family: magneto"><label for="todo">Todo</label></h2>
+                            <input type="text" class="form-control" id="todoUserInput" placeholder="Enter Your ToDo...." required/>
                             <button type="submit" class="btn btn-primary">Create ToDo</button>
                         </div>
                     </form>
@@ -41,7 +41,9 @@
                 const todoUserInput = $("#todoUserInput");
 
                 const getTodos = () => {
-                    fetch("/getTodos", {method: "get"}).then((response) => {
+                    fetch("/getTodos", {
+                        method: "get"
+                    }).then((response) => {
                         return response.json();
                     }).then((data) => {
                         console.log(data);
@@ -53,22 +55,24 @@
 
                 const resetTodosInput = () => {
                     $("#todoUserInput").val('');
-                }
+                }                
 
                 const editTodo = (todo, todoID, editID) => {
-                    console.log("Edit");
-                    let editBtn = $(`${editID}`);
+                    let editBtn = $(`#${editID}`);
                     editBtn.click(() => {
                         fetch(`/${todo._id}`, {
                             method: "put",
                             headers: {
-                                "Content-Type": "application/json; charset=utf8"
+                                "Content-Type": "application/json; charset=utf-8"
                             },
-                            body: JSON.stringify({todo: todoUserInput.val()})
+                            body: JSON.stringify({
+                                todo: todoUserInput.val()
+                            })
                         }).then((response) => {
                             return response.json();
                         }).then((data) => {
                             if(data.ok == 1) {
+                                console.log(data);
                                 let todoIndex = $(`#${todoID}`);
                                 todoIndex.html(data.value.todo);
                                 resetTodosInput();
@@ -76,7 +80,7 @@
                         });
                     });
                 }
-
+                
                 const deleteTodo = (todo, listItemID, deleteID) => {
                     let deleteBtn = $(`#${deleteID}`);
                     deleteBtn.click(() => {
@@ -84,8 +88,9 @@
                             method: "delete"
                         }).then((response) => {
                             return response.json();
-                        }).then((data) => {
+                        }).then((data) => {                            
                             if(data.ok == 1) {
+                                console.log(data);
                                 $(`#${listItemID}`).remove();
                             }
                         });
@@ -127,7 +132,9 @@
                     e.preventDefault();
                     fetch("/", {
                         method: 'post',
-                        body: JSON.stringify({todo: todoUserInput.val()}),
+                        body: JSON.stringify({
+                            todo: todoUserInput.val()
+                        }),
                         headers: {
                             "Content-Type": "application/json; charset=utf-8"
                         }
@@ -135,6 +142,7 @@
                         return response.json();
                     }).then((data) => {
                         if(data.result.ok == 1 && data.result.n == 1) {
+                            console.log(data);
                             let ids = buildIDS(data.document);
                             display.append(buildTemplate(data.document, ids));
                             editTodo(data.document, ids.todoID, ids.editID);
